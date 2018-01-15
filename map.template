@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        .ouimage {
+        position: absolute;
+		z-index:1;
+		width: 55px;
+		height: 90px;
+		top:50px;
+		right:20px;
+		}
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+<img src='ou.png' class='ouimage'/>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2FpdGVqYSIsImEiOiJjajM0dzRxYnIwMGYxMzhxdTRoeXJhOXhuIn0.bwR-llN8_tA9bxGr295nJg';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    center: <<<thisismylatlonplaceholder>>>,
+    zoom: 8
+});
+
+var url1 = 'flightsgeo1.json';
+var url2 = 'flightsgeo2.json';
+var url3 = 'flightsgeo3.json';
+var url4 = 'flightsgeo4.json';
+
+map.on('load', function () {
+    window.setInterval(function() {
+        map.getSource('drone1').setData(url1);
+		map.getSource('drone2').setData(url2);
+		map.getSource('drone3').setData(url3);
+		map.getSource('drone4').setData(url4);
+    }, 2000);
+		
+	map.addSource('drone1', { type: 'geojson', data: url1 });
+    map.addLayer({
+        "id": "drone1",
+        "type": "symbol",
+        "source": "drone1",
+        "layout": {
+            "icon-image": "{icon}-15",
+            "text-field": "{title}",
+            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+            "text-offset": [0, 0.6],
+            "text-anchor": "top"
+        }
+    });
+	
+	map.addSource('drone2', { type: 'geojson', data: url2 });
+    map.addLayer({
+        "id": "drone2",
+        "type": "line",
+        "source": "drone2",
+        "paint": {
+						"line-color": "#F00",
+						"line-width": 5
+                   }
+    });	
+	
+	map.addSource('drone3', { type: 'geojson', data: url3 });
+    map.addLayer({
+        "id": "drone3",
+        "type": "line",
+        "source": "drone3",
+        "paint": {
+						"line-color": "#0F0",
+						"line-width": 5
+                   }
+    });	
+
+	map.addSource('drone4', { type: 'geojson', data: url1 });
+    map.addLayer({
+        "id": "drone4",
+        "type": "circle",
+        "source": "drone4",
+		'paint': {
+            "circle-radius": 2.0,
+			"circle-color": "#000",
+			"circle-opacity": 0.15                             	
+            }
+		
+    });
+
+	
+});
+</script>
+
+</body>
+</html>
+
